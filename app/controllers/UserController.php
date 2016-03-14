@@ -20,11 +20,14 @@ class UserController extends BaseController {
 
 		if ( $validator->passes() ) {
 
-			$user = new User();
-			$user->email 				= Input::has('email')? $input['email'] : '';
-			$user->firstname 			= Input::has('firstname')? $input['firstname'] : '';
-			$user->lastname 			= Input::has('lastname')? $input['lastname'] : '';
-			$user->password 			= Hash::make( $input['password'] );
+                        $levelOne = Level::where('level', '=', 1)->first();
+			
+                        $user = new User();
+			$user->email 			= Input::has('email')? $input['email'] : '';
+			$user->name 			= Input::has('name')? $input['name'] : '';
+			$user->password 		= Hash::make( $input['password'] );
+                        $user->level_id 		= $levelOne->getKey();
+                        $user->phone_number             = Input::has('phone_number')? $input['phone_number'] : '';
 
 			if ( !$user->save() )
 				$user = ApiResponse::errorInternal('An error occured. Please, try again.');
@@ -33,6 +36,8 @@ class UserController extends BaseController {
 		else {
 			return ApiResponse::validation($validator);
 		}
+                
+                $user->level_object = $user->Level()->get();
 		Log::info('<!> Created : '.$user);
 
 		return ApiResponse::json($user);
@@ -64,6 +69,7 @@ class UserController extends BaseController {
 				Log::info('<!> Device Token Received : '. $device_token .' - Device ID Received : '. $device_id .' for user id: '.$token->user_id);
 				Log::info('<!> Logged : '.$token->user_id.' on '.$token->device_os.'['.$token->device_id.'] with token '.$token->key);
 				
+                                $user->level_object = $user->Level()->get();
 				$token->user = $user->toArray();
 				$token = ApiResponse::json($token, '202');
 			}
@@ -75,8 +81,8 @@ class UserController extends BaseController {
 			return ApiResponse::validation($validator);
 		}
 	}
-
-	/**
+        
+        /**
 	 *	Authenticate a user based on Facebook access token. If the email address from facebook is already in the database, 
 	 *	the facebook user id will be added. 
 	 *	If not, a new user will be created with a random password and user info from facebook.
@@ -106,8 +112,7 @@ class UserController extends BaseController {
 			if ( !($user instanceof User) ){
 				// Create an account if none is found
 				$user = new User();
-				$user->firstname = $profile->getFirstName();
-				$user->lastname = $profile->getLastName();
+				$user->name = $profile->getName();
 				$user->email = $profile->getProperty('email');
 				$user->password = Hash::make( uniqid() );
 			}

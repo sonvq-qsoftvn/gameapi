@@ -16,10 +16,13 @@ class CreateUsersTable extends Migration {
         {
             $table->increments('_id');
             $table->string('email');
-            $table->string('firstname');
-            $table->string('lastname');
+            $table->string('name');
             $table->string('password');
             $table->string('facebook_id')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->integer('stars_number')->nullable();            
+            $table->integer('number_of_free_roll')->nullable()->default(1);   
+            $table->integer('level_id')->unsigned()->index();
             $table->softDeletes();
             $table->timestamps();
         });

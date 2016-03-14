@@ -20,27 +20,32 @@ class User extends SmartLoquent implements UserInterface, RemindableInterface {
 	 *
 	 * @var array
 	 */
-	protected $hidden = array('password');
+	protected $hidden = array('password', '_id');
 	protected $dates = ['deleted_at'];
+        protected $fillable = array('email', 'name', 'password', 'phone_number', 'stars_number', 'number_of_free_roll', 'level_id');
 
+        public function Level() {
+            return $this->hasOne('Level', '_id', 'level_id');
+        }
+    
 	protected static $createRules = array(
-		'firstname'				=>	'required',
-		'lastname'				=>	'required',
+		'name'				=>	'required',
 		'password'				=>	'required|min:6|confirmed',
-		'password_confirmation'	=>	'required|min:6',
+		'password_confirmation'                 =>	'required|min:6',
 		'email'					=>	'required|email|unique:users,email',
+                'phone_number'                          =>      'min:6'
 	);
 	protected static $authRules = array(
 		'email'					=>	'required|email',
 		'password'				=>	'required',
 		'device_id'				=>	'required',
-		'device_type'			=>	'required',
+		'device_type'                           =>	'required',
 		// 'device_token'			=>	'required',
 	);
 	protected static $fb_authRules = array(
-		'access_token'			=>	'required',
+		'access_token'                          =>	'required',
 		'device_id'				=>	'required',
-		'device_type'			=>	'required',
+		'device_type'                           =>	'required',
 		// 'device_token'			=>	'required',
 	);
 
@@ -51,7 +56,7 @@ class User extends SmartLoquent implements UserInterface, RemindableInterface {
 	protected static $resetRules = array(
 		'email'					=>	'required|email|exists:users',
 		'password'				=>	'required|min:6|confirmed',
-		'password_confirmation'	=>	'required|min:6',
+		'password_confirmation'                 =>	'required|min:6',
 	);
 
 	public static function getCreateRules() {		return self::$createRules; }

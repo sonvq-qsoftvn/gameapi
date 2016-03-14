@@ -5,6 +5,7 @@ class Token extends SmartLoquent {
 	protected $collection = 'tokens';
 
     protected $guarded = array('key');
+    protected $hidden = array('_id');
 
     public static function randomKey($size) {
         do {

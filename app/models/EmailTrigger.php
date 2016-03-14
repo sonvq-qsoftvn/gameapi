@@ -24,8 +24,7 @@ class EmailTrigger {
 				if ( $object1 instanceof ResetKey ){
 					$receiver = $object1->user->email;
 					$content = array(
-							'firstname'		=> $object1->user->firstname,
-							'lastname'		=> $object1->user->lastname,
+							'name'		=> $object1->user->name,
 							'expiration'	=> $object1->expiration_date->format('d F Y - H:i:s'),
 							'url'			=> URL::to('v1/users/reset/'.$object1->key),
 						);
