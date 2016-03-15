@@ -23,8 +23,9 @@ class User extends SmartLoquent implements UserInterface, RemindableInterface {
 	protected $hidden = array('password', '_id');
 	protected $dates = ['deleted_at'];
         protected $fillable = array('email', 'name', 'password', 'phone_number', 'stars_number', 'number_of_free_roll', 'level_id');
-
-        public function Level() {
+        protected $with = array('level_object');
+        
+        public function level_object() {
             return $this->hasOne('Level', '_id', 'level_id');
         }
     

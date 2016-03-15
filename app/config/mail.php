@@ -57,7 +57,7 @@ return array(
 	|
 	*/
 
-	'from' => array('address' => 'your-email@gmail.com', 'name' => 'John Doe'),
+	'from' => array('address' => 'amazingwheel2016@gmail.com', 'name' => 'Amazing Wheel Game'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -83,7 +83,7 @@ return array(
 	|
 	*/
 
-	'username' => 'your-email@gmail.com',
+	'username' => 'amazingwheel2016@gmail.com',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -96,7 +96,7 @@ return array(
 	|
 	*/
 
-	'password' => 'your-password',
+	'password' => 'langtudeptrai123456',
 
 	/*
 	|--------------------------------------------------------------------------

@@ -37,10 +37,11 @@ class UserController extends BaseController {
 			return ApiResponse::validation($validator);
 		}
                 
-                $user->level_object = $user->Level()->get();
 		Log::info('<!> Created : '.$user);
 
-		return ApiResponse::json($user);
+                $userReturn = User::where('email', '=', $user->email)->first();
+                
+		return ApiResponse::json($userReturn->toArray());
 	}
 
 	/**
@@ -69,7 +70,6 @@ class UserController extends BaseController {
 				Log::info('<!> Device Token Received : '. $device_token .' - Device ID Received : '. $device_id .' for user id: '.$token->user_id);
 				Log::info('<!> Logged : '.$token->user_id.' on '.$token->device_os.'['.$token->device_id.'] with token '.$token->key);
 				
-                                $user->level_object = $user->Level()->get();
 				$token->user = $user->toArray();
 				$token = ApiResponse::json($token, '202');
 			}
@@ -110,11 +110,14 @@ class UserController extends BaseController {
 				$user = User::where('email', '=', $profile->getProperty('email') )->first();
 
 			if ( !($user instanceof User) ){
-				// Create an account if none is found
+				// Create an account if none is found                                
+                                $levelOne = Level::where('level', '=', 1)->first();
+                                
 				$user = new User();
-				$user->name = $profile->getName();
-				$user->email = $profile->getProperty('email');
-				$user->password = Hash::make( uniqid() );
+				$user->name             = $profile->getName();
+				$user->email            = $profile->getProperty('email');
+				$user->password         = Hash::make( uniqid() );
+                                $user->level_id 	= $levelOne->getKey();
 			}
 				
 			$user->facebook_id = $profile->getId();
@@ -130,7 +133,8 @@ class UserController extends BaseController {
 			Log::info('<!> FACEBOOK Logged : '.$token->user_id.' on '.$token->device_os.'['.$token->device_id.'] with token '.$token->token);
 
 			$token = $token->toArray();
-			$token['user'] = $user->toArray();
+                        $userReturn = User::where('email', '=', $user->email)->first();
+			$token['user'] = $userReturn->toArray();
 
 			Log::info( json_encode($token) );
 			
@@ -197,7 +201,7 @@ class UserController extends BaseController {
 
 			if ( $reset->save() ){
 				Log::info($reset);
-				$sent = EmailTrigger::send( 'lost_password', $reset );
+				$sent = EmailRunner::send( 'lost_password', $reset );
 			}
 
 			if ( $sent )
