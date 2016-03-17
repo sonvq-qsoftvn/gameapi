@@ -22,6 +22,10 @@ class CreateRelationForeignkeys extends Migration {
         Schema::table('users', function($table) {
             $table->foreign('level_id')->references('_id')->on('levels')->onDelete('cascade');;
         });
+        
+        Schema::table('payments', function($table) {
+            $table->foreign('user_id')->references('_id')->on('users')->onDelete('cascade');;
+        });
     }
 
     /**
@@ -40,6 +44,10 @@ class CreateRelationForeignkeys extends Migration {
         
         Schema::table('users', function($table) {
             $table->dropForeign('users_level_id_foreign');
+        });
+        
+        Schema::table('payments', function($table) {
+            $table->dropForeign('payments_user_id_foreign');
         });
     }
 

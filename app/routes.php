@@ -52,10 +52,11 @@ Route::group(array('prefix' => 'v1'), function(){
     Route::post('users/auth/facebook',  array('as' => 'v1.users.auth.facebook', 'uses' => 'UserController@authenticateFacebook') );
 
     Route::resource('users', 'UserController', array('only' => array('index', 'store')) );
-
+        
     //	user needs to have a registered and active token
     Route::group(array('before' => 'logged_in'), function() {
-
+        Route::resource('payments', 'PaymentController', array('only' => array('store')) );
+        
         Route::get('users/sessions',    array('as' => 'v1.users.sessions',      'uses' => 'UserController@sessions') );
 
         Route::group(array('prefix' => 'users/{users}'), function() {

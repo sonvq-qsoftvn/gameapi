@@ -8,7 +8,7 @@ class Level extends SmartLoquent {
      * @var string
      */
     protected $collection = 'levels';
-    protected $hidden = array('_id');
+    protected $hidden = array('_id', 'deleted_at', 'created_at', 'updated_at');
     protected $guarded = array('key');
     public $timestamps = true;
 
