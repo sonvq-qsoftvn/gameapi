@@ -65,7 +65,8 @@ Route::group(array('prefix' => 'v1'), function(){
             Route::post('logout',       array('as' => 'v1.users.logout',    'uses' => 'UserController@logout') );
 
         });
-
+        
+        Route::post('wheels/start',    array('as' => 'v1.wheels.start',      'uses' => 'WheelController@start') );
     });
     
 
