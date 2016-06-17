@@ -91,45 +91,33 @@ class WheelController extends BaseController {
     public function start() {
         $input = Input::all();
         
-        $test = Input::has('test')? $input['test'] : 0;
+        $paid = Input::has('paid')? $input['paid'] : 4;
         
-        if ($test == 1) {
+        if ($paid == 1) {
             // Do the first round
             $arrayResult = array();
             $arrayResult['first_round'] = $arrayResult['second_round'] = $arrayResult['third_round'] = null;
-            $firstResult = 'up';
-            $arrayResult['first_round'] = $firstResult;
 
-            if ($firstResult == 'up') {
-                $secondResult = array_rand($this->arraySecondWheel, 1);    
-                $arrayResult['second_round'] = $this->arraySecondWheel[$secondResult];
-
-                if ($this->arrayFirstWheel[$secondResult] == 'up') {
-                    $thirdResult = array_rand($this->arrayThirdWheel, 1);    
-                    $arrayResult['third_round'] = $this->arrayThirdWheel[$thirdResult];
-                }
-            }        
+            $secondResult = array_rand($this->arraySecondWheel, 1);    
+            
+            $arrayResult['second_round'] = $this->arraySecondWheel[$secondResult];
+            
+            if ($arrayResult['second_round'] == 'up') {
+                $thirdResult = array_rand($this->arrayThirdWheel, 1);    
+                $arrayResult['third_round'] = $this->arrayThirdWheel[$thirdResult];
+            }
 
             return ApiResponse::json($arrayResult);
-        } else if ($test == 2) {
+        } else if ($paid == 2) {
             // Do the first round
             $arrayResult = array();
-            $arrayResult['first_round'] = $arrayResult['second_round'] = $arrayResult['third_round'] = null;
-            $firstResult = 'up';
-            $arrayResult['first_round'] = $firstResult;
+            $arrayResult['first_round'] = $arrayResult['second_round'] = $arrayResult['third_round'] = null;            
 
-            if ($firstResult == 'up') {
-                $secondResult = 'up';    
-                $arrayResult['second_round'] = $secondResult;
-
-                if ($secondResult == 'up') {
-                    $thirdResult = array_rand($this->arrayThirdWheel, 1);    
-                    $arrayResult['third_round'] = $this->arrayThirdWheel[$thirdResult];
-                }
-            }        
+            $thirdResult = array_rand($this->arrayThirdWheel, 1);    
+            $arrayResult['third_round'] = $this->arrayThirdWheel[$thirdResult];
 
             return ApiResponse::json($arrayResult);
-        } else {
+        } else if ($paid == 0) {
             // Do the first round
             $arrayResult = array();
             $arrayResult['first_round'] = $arrayResult['second_round'] = $arrayResult['third_round'] = null;
@@ -147,6 +135,8 @@ class WheelController extends BaseController {
             }        
 
             return ApiResponse::json($arrayResult);
+        } else {
+            return ApiResponse::json( 'Some input is missing', 412);
         }
         
     }
